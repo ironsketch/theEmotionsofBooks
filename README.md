@@ -55,6 +55,7 @@ Your files need to be txt.
 Example runs:
 
 python3 bookEmotion.py meow_joy.txt
+
 python3 bookEmotion.py /train
 
 That's as far as I have gotten with this. More to come!
