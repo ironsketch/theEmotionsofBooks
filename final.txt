@@ -1,0 +1,20 @@
+Machine Learning Final
+
+    SVM
+    Decision Trees
+    Regression
+    Logistic Regression
+    Stochastic Gradient Descent
+    Perceptron
+    Regularization
+    Normalization
+    Problem <-> Technique
+    Probability
+    Naive Bayes
+    Grid Search
+    Random Forest
+    Ensemble Methods
+
+---------------------------
+
+

@@ -93,15 +93,16 @@ def main():
     getCorrData(corrData, emotionDataCopy)
 
     # The location of where your txt files are
-    folder = "books"
+    folder = "books1"
 
     # This returns a list of the files to work on.
     files = openFolder(folder)
 
     allBooks, wordsCount = processText(files, folder, emotionDataCopy, corrData)
-
-    split_train_test(wordsCount, .3)
-
+    s = np.array(wordsCount)
+    train, test = split_train_test(s, .3)
+    print(len(train))
+    print(len(test))
     count = 0
     #for book in allBooks:
     #    maxFound = max(map(lambda x: x[1], book))

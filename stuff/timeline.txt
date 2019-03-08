@@ -1,0 +1,24 @@
+Michelle Bergin
+Timeline
+
+Work on probability and how I can normalize my data. How I can increase a variable when correlation is strong and decrease a variable when correlation is weaker but at a much smaller rate than I am. With thousands of words my end result tends towards 0. Even words that should increase correlation, aren't.
+
+For the above problem my goal is to study this specifically and my due date is Friday Feb 15th
+
+My second goal for this date is to pull out a book you lent me and try to find something I can focus on as well. (Friday Feb 15th)
+
+The week after that is to test if my new mathematics seem to be working.
+
+    If not: I need to re-evaluate my tactics and I will give my self one more week to accomplish this (Friday Feb 21st)
+
+    If do: I will look into working with the writing center to get short stories (About one paragraph) of what the writer considers to be a reflection of a specific emotion (One that my data set checks for) I will then run it through my program. I would also like to have people read this paragraph and tell me what emotion they think is closest. I give my self 1 - 2 weeks depending on other human availability. So my hopeful goal will be (Friday Feb 21st)
+
+A third goal that I have in between all this when I get frustrated is to turn my program into a graphical interface that is very generic. Reading different types of files is important. If I am reading a play, I am looking at a different structure of text rather than a book.
+
+My goal: To be able to choose whether the text is a book or play
+    To isolate speech vs the rest (Which so far is different for a play. I have seen no quotations for Shakespears plays)
+    To save data and load data so that if I want to work on a lot of text vs. just one. Maybe I have a 5 book series and I want the overall emotion of a series. Is this possible!? I don't know but I want the choice.
+    The GUI will have this and a way to load the files you need. And a process button.
+
+
+That is all that I can think of now.
