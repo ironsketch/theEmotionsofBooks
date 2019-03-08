@@ -35,4 +35,16 @@ emotionDict = {"positive" : 0, "negative" : 1, "anger" : 2, "anticipation" : 3, 
 
 So in total I have 10 classes.
 
-## Creating the machine learning set:
+## Creating the machine learning training and test set:
+
+Once I have a list of all words related to each txt I shuffle and seperate a training and test set for y and x given a seperation percentage. Casually I just use 30% split.
+
+## Machine Learning
+
+### SGDClassifier
+
+I first decided to start small and go for the one vs all approach to better learn how to do machine learning. So I did all anger or not, or all disgust or not. etc.
+
+I imported the scikit learns Stochastic Gradient Descent. I set of the classifier and I train my data on whether it is or is not the emotion I am looking for and then fit my data. To test if it is classifying correctly I then use scikits predict method to see if it predicts correctly. Which, if I have more than 3 instances, it always predicts correctly. Any less and errors occur.
+
+
