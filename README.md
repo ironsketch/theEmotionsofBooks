@@ -47,4 +47,14 @@ I first decided to start small and go for the one vs all approach to better lear
 
 I imported the scikit learns Stochastic Gradient Descent. I set of the classifier and I train my data on whether it is or is not the emotion I am looking for and then fit my data. To test if it is classifying correctly I then use scikits predict method to see if it predicts correctly. Which, if I have more than 3 instances, it always predicts correctly. Any less and errors occur.
 
+## How to use:
+You need to tell the program what folder or file you want it to look at. And for training (so far how I have built this) you need to label your files with and underscore and the name of the emotion. For ex, meow_joy.txt
 
+Your files need to be txt.
+
+Example runs:
+
+python3 bookEmotion.py meow_joy.txt
+python3 bookEmotion.py /train
+
+That's as far as I have gotten with this. More to come!
