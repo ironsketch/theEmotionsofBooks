@@ -47,7 +47,47 @@ I first decided to start small and go for the one vs all approach to better lear
 
 I imported the scikit learns Stochastic Gradient Descent. I set of the classifier and I train my data on whether it is or is not the emotion I am looking for and then fit my data. To test if it is classifying correctly I then use scikits predict method to see if it predicts correctly. Which, if I have more than 3 instances, it always predicts correctly. Any less and errors occur.
 
+## Cross Validation
+
+I set up a cross validation with my SGDClassifier but since my training set is SO small my accuracy is crazy low. Splitting my data for the training set at 40% I get:
+
+[0.75, 0.875, 0.85714286] 
+
+This is with 3 folds.
+
+## BaseEstimator and Never 8 Classifier
+
+I then used a base estimator for when it is never 8 my accuracy went up!
+
+[0.875, 0.875, 0.85714286]
+
+## Confusion Matrix
+
+Running confusion matrix gives me:
+
+[[16  2]
+
+ [ 4  0 ]]
+
+2 was wrongly classified as a text about surprise. 4 were wrongly cassified as not surprised.
+
+## Precision and Recall
+
+These are VERY low. More than likely because I have such a little test base!
+
+0.2
+0.3333333333333333
+
+## F1 Score
+
+.25 Which is from favoring precision and recall
+
+## Threshold Curve
+
+What am I looking at?
+
 ## How to use:
+
 You need to tell the program what folder or file you want it to look at. And for training (so far how I have built this) you need to label your files with and underscore and the name of the emotion. For ex, meow_joy.txt
 
 Your files need to be txt.
@@ -57,5 +97,3 @@ Example runs:
 python3 bookEmotion.py meow_joy.txt
 
 python3 bookEmotion.py /train
-
-That's as far as I have gotten with this. More to come!

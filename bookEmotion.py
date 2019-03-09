@@ -2,11 +2,22 @@ import os
 import sys
 import csv
 import numpy as np
+import matplotlib.pyplot as plt
 from collections import Counter
 from sklearn.linear_model import SGDClassifier
 from sklearn import linear_model
+from sklearn.model_selection import cross_val_score
+from sklearn.base import BaseEstimator
+from sklearn.model_selection import cross_val_predict
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, precision_recall_curve
 
 tenEmotions = ["Positive", "Negative", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust"]
+
+class Never8Classifier(BaseEstimator):
+    def fit(self, x, y=None):
+        pass
+    def predict(self, x):
+        return np.zeros((len(x), 1), dtype=bool)
 
 def load_emotion_data(name):
     cleanEmotions = []
@@ -95,9 +106,14 @@ def training(x, y, test_ratio):
     y_train = [y[i] for i in train_indices]
     x_test = [x[i] for i in test_indices]
     y_test = [y[i] for i in test_indices]
-    print(y_train)
-    print(y_test)
     return np.array(x_train), np.array(y_train), np.array(x_test), np.array(y_test)
+
+def plot_precision_recall_vs_threshold(precisions, recalls, thresholds):
+    plt.plot(thresholds, precisions[:-1], "b--", label="Precision")
+    plt.plot(thresholds, recalls[:-1], "g-", label="Recall")
+    plt.xlabel("Threshold")
+    plt.legend(loc="center left")
+    plt.ylim([0, 1])
 
 def main():
     if(len(sys.argv) != 2):
@@ -106,17 +122,55 @@ def main():
 
     emotions = load_emotion_data('NRCcsvEmotion.csv')
     allWords, x, y = getDataReady(sys.argv[1], emotions)
-    x_train, y_train, x_test, y_test = training(x, y, .3)
+    #listy = y.copy()
+    #listy.sort()
+    #print(listy)
+    x_train, y_train, x_test, y_test = training(x, y, .4)
 
-    y_train_Sur = (y_train == 4)
-    y_test_Sur = (y_test == 4)
+    y_train_Sur = (y_train == 8)
+    y_test_Sur = (y_test == 8)
     sgd_clf = SGDClassifier(max_iter=1000, tol=1e-3)
     sgd_clf.fit(x_train, y_train_Sur)
 
-    for i in range(len(x_train)):
-        para = x_train[i]
-        print(y_train[i])
-        print(sgd_clf.predict([para]))
+    # Predictions
+    #############
+    #for i in range(len(x_train)):
+    #    para = x_train[i]
+    #    print(y_train[i])
+    #    print(sgd_clf.predict([para]))
+
+    # Cross Validation
+    ##################
+    print(cross_val_score(sgd_clf, x_train, y_train_Sur, cv=3, scoring="accuracy"))
+
+    # BaseEstimator and Never8Classifier
+    ####################################
+    never8Class = Never8Classifier()
+    print(cross_val_score(never8Class, x_train, y_train_Sur, cv=3, scoring="accuracy"))
+
+    # Confusion Matrix
+    ##################
+    y_train_pred = cross_val_predict(sgd_clf, x_train, y_train_Sur, cv=3)
+    print(confusion_matrix(y_train_Sur, y_train_pred))
+
+    # Precision and Recall
+    ######################
+
+    print(precision_score(y_train_Sur, y_train_pred))
+    print(recall_score(y_train_Sur, y_train_pred))
+
+    # F1 Score
+    ##########
+
+    print(f1_score(y_train_Sur, y_train_pred))
+
+    # Threshold Curve
+
+    y_scores = cross_val_predict(sgd_clf, x_train, y_train_Sur, cv=3, method="decision_function")
+
+    precisions, recalls, thresholds = precision_recall_curve(y_train_Sur, y_scores)
+    plot_precision_recall_vs_threshold(precisions, recalls, thresholds)
+    plt.show()
 
 if __name__ == "__main__":
     main()
