@@ -86,6 +86,33 @@ These are VERY low. More than likely because I have such a little test base!
 
 What am I looking at?
 
+## Fuzzy Logic
+
+What is printed represents each emotion and the degree of correctness for each emotion for each text. In the real world most experiences are an amalgamation of many emotions. 
+
+## The Normal Equation
+
+From the print out it appears that there is only one theta for each class...
+
+[ 4.28598897  0.81045702  0.26536352 -0.50024168  0.27435619  0.11305699  
+
+-0.13021756 -1.23335824 -0.37148055  0.53958076 -0.28161495]
+
+But now it seems we can use this for predictions
+Except I don't understand my book at this part so skipping.
+
+## PyPlot
+
+So I tried plotting my x_train and y_train and I noticed it is either 0 or 1 so that means that I need to possibly use a logistic regression model!
+
+## Logistic Regression Model
+
+I should be able to use this but I am not sure how or what to plot... So I am thinking about my fuzzy logic needs. 
+
+## Decision Tree
+
+I created a multiclass decision tree and then I loaded the book, Alice in Wonderland. I then ran it through the decision tree to find the probability of the book in each class. Unfortunately I got returned 1 or 0's ...
+
 ## How to use:
 
 You need to tell the program what folder or file you want it to look at. And for training (so far how I have built this) you need to label your files with and underscore and the name of the emotion. For ex, meow_joy.txt

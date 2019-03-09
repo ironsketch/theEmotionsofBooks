@@ -4,12 +4,12 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import Counter
-from sklearn.linear_model import SGDClassifier
+from sklearn.linear_model import SGDClassifier, LogisticRegression
 from sklearn import linear_model
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, cross_val_predict
 from sklearn.base import BaseEstimator
-from sklearn.model_selection import cross_val_predict
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, precision_recall_curve
+from sklearn.tree import DecisionTreeClassifier
 
 tenEmotions = ["Positive", "Negative", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust"]
 
@@ -86,7 +86,7 @@ def getDataReady(addy, emotions):
         tmp = getBook("", addy, emotions)
         allWords.append(tmp)
         x.append(getEmotions(tmp, emotions))
-        return allWords, x
+        return allWords, x, []
 
     lsDir = os.listdir(addy)
     for each in lsDir:
@@ -115,6 +115,36 @@ def plot_precision_recall_vs_threshold(precisions, recalls, thresholds):
     plt.legend(loc="center left")
     plt.ylim([0, 1])
 
+def fuzzy(y, x):
+    for i in range(len(y)):
+        theMax = max(x[i])
+        print("The texts emotion was labeled %s" % (tenEmotions[y[i]]))
+        print("The top emotion was %s" % (tenEmotions[x[i].index(theMax)]))
+        print("Below is the percentages of each emotion")
+        if theMax == 0:
+            theMax = 1
+        a = [x[i][j] / theMax for j in range(len(x[i]))]
+        print("  Positive Negative Anger    Anticip  Disgust   Fear      Joy     Sadness  Surprise  Trust")
+        for j in range(len(a)):
+            print("%8.2f" % (a[j] * 100), end=" ")
+        print()
+        print()
+
+def negVSpos(x, y):
+    newX = [x[i][0] for i in range(len(x))]
+    newY = [x[i][1] for i in range(len(x))]
+
+    plt.plot(newX, newY, "go")
+    plt.show()
+
+def decTree(x, y, emotions):
+    clf = DecisionTreeClassifier(random_state=42)
+    clf.fit(x, y)
+
+    print("\nLoading Alice in Wonderland")
+    a, xNew, yNew = getDataReady("books1/alice.txt", emotions)
+    print(clf.predict_proba(xNew))
+
 def main():
     if(len(sys.argv) != 2):
         print("Usage: python3 bookEmotion.py name_of_book.txt\nOr: python3 bookEmotion.py name_of_folder/")
@@ -122,9 +152,6 @@ def main():
 
     emotions = load_emotion_data('NRCcsvEmotion.csv')
     allWords, x, y = getDataReady(sys.argv[1], emotions)
-    #listy = y.copy()
-    #listy.sort()
-    #print(listy)
     x_train, y_train, x_test, y_test = training(x, y, .4)
 
     y_train_Sur = (y_train == 8)
@@ -141,36 +168,69 @@ def main():
 
     # Cross Validation
     ##################
+    print("\nCross Validation")
     print(cross_val_score(sgd_clf, x_train, y_train_Sur, cv=3, scoring="accuracy"))
 
     # BaseEstimator and Never8Classifier
     ####################################
     never8Class = Never8Classifier()
+    print("\nBaseEstimator and Never8Classifier")
     print(cross_val_score(never8Class, x_train, y_train_Sur, cv=3, scoring="accuracy"))
 
     # Confusion Matrix
     ##################
     y_train_pred = cross_val_predict(sgd_clf, x_train, y_train_Sur, cv=3)
+    print("\nConfusion Matrix")
     print(confusion_matrix(y_train_Sur, y_train_pred))
 
     # Precision and Recall
     ######################
 
-    print(precision_score(y_train_Sur, y_train_pred))
-    print(recall_score(y_train_Sur, y_train_pred))
+    print("\nPrecision: %.2f" % (precision_score(y_train_Sur, y_train_pred)))
+    print("Recall: %.2f" % (recall_score(y_train_Sur, y_train_pred)))
 
     # F1 Score
     ##########
 
-    print(f1_score(y_train_Sur, y_train_pred))
+    print("\nF1 Score: %.2f" % (f1_score(y_train_Sur, y_train_pred)))
 
     # Threshold Curve
-
+    #################
     y_scores = cross_val_predict(sgd_clf, x_train, y_train_Sur, cv=3, method="decision_function")
 
     precisions, recalls, thresholds = precision_recall_curve(y_train_Sur, y_scores)
-    plot_precision_recall_vs_threshold(precisions, recalls, thresholds)
-    plt.show()
+    #plot_precision_recall_vs_threshold(precisions, recalls, thresholds)
+    #plt.show()
+
+    # Fuzzy Logic
+    #############
+    #fuzzy(y, x)
+
+    # The Normal Equation
+    #####################
+    x_b = np.c_[np.ones((len(x), 1)), x]
+    theta_best = np.linalg.inv(x_b.T.dot(x_b)).dot(x_b.T).dot(y)
+    print("\nTheta Best")
+    print(theta_best)
+
+    # PyPlot
+    ########
+    #plt.plot(x_train,y_train_Sur,'ro')
+    #plt.show()
+
+    # Logistic Regression Model
+    ###########################
+    #log_reg = LogisticRegression(solver='lbfgs', multi_class='auto')
+    #log_reg.fit(x,y)
+    #x_new = np.linspace(0,3,1000).reshape(-1,10)
+    #y_proba = log_reg.predict_proba(x_new)
+    #plt.plot(x_new, y_proba[:, 1], "g-", label="yes")
+    #plt.plot(x_new, y_proba[:, 0], "b--", label="no")
+    #plt.show()
+
+    #negVSpos(x, y)
+
+    decTree(x, y, emotions)
 
 if __name__ == "__main__":
     main()
